@@ -9,6 +9,7 @@
       filterNow: "Co teď",
       filterDad: "Dad",
       filterInvest: "Investice",
+      filterNewbuild: "Novostavby",
       filterActive: "Jen ACTIVE",
       sortLabel: "Řadit",
       sortDad: "Dad Fit",
@@ -42,7 +43,7 @@
       land2t: "Skóre",
       land2: "Dad Fit a Invest na kartě; odtud otevřeš původní inzerát.",
       land3t: "Zdroj",
-      land3: "Airtable; ve všední dny se přegeneruje. Filtry: Co teď, Dad, Investice.",
+      land3: "Airtable; ve všední dny se přegeneruje. Filtry: Dad, Investice, Novostavby, Vše.",
       landNote: "",
       foot: "Zdroj: Airtable. Veřejný snapshot na GitHub Pages — záznamy zůstávají v Airtable.",
       actions: {
@@ -62,6 +63,7 @@
       filterNow: "What now",
       filterDad: "Dad",
       filterInvest: "Investment",
+      filterNewbuild: "New builds",
       filterActive: "Active only",
       sortLabel: "Sort",
       sortDad: "Dad Fit",
@@ -95,7 +97,7 @@
       land2t: "Scores",
       land2: "Dad Fit and Invest on each card; open the original listing from the card.",
       land3t: "Source",
-      land3: "Airtable; rebuilt on weekdays. Filters: What now, Dad, Investment.",
+      land3: "Airtable; rebuilt on weekdays. Filters: Dad, Investment, New builds, All.",
       landNote: "",
       foot: "Source: Airtable. Public snapshot on GitHub Pages — records stay in Airtable.",
       actions: {
@@ -166,6 +168,11 @@
     return "";
   }
 
+  function isNewBuild(p) {
+    const tags = p.tags || [];
+    return tags.some((t) => String(t).toUpperCase() === "NEW BUILD");
+  }
+
   function matchesFilter(p) {
     // Dad: only show when Dad Fit is in play (>= 60)
     if (state.filter === "dad") {
@@ -174,6 +181,10 @@
     // Investment: has an invest score (shown even when Dad is hidden)
     if (state.filter === "invest") {
       return p.investment != null && Number(p.investment) > 0;
+    }
+    // New builds: NEW BUILD tag only
+    if (state.filter === "newbuild") {
+      return isNewBuild(p);
     }
     // All: everything live today in the pipeline views
     return true;
@@ -188,6 +199,7 @@
     const list = allLive();
     if (filter === "dad") return list.filter((p) => p.dadFit != null && Number(p.dadFit) >= 60).length;
     if (filter === "invest") return list.filter((p) => p.investment != null && Number(p.investment) > 0).length;
+    if (filter === "newbuild") return list.filter(isNewBuild).length;
     return list.length;
   }
 
@@ -195,6 +207,7 @@
     const map = {
       dad: countForFilter("dad"),
       invest: countForFilter("invest"),
+      newbuild: countForFilter("newbuild"),
       all: countForFilter("all"),
     };
     document.querySelectorAll("[data-count]").forEach((el) => {
@@ -236,6 +249,7 @@
     const fall = $("[data-i18n=filter-all]"); if (fall) fall.textContent = dict.filterAll;
     const fdad = $("[data-i18n=filter-dad]"); if (fdad) fdad.textContent = dict.filterDad;
     const finv = $("[data-i18n=filter-invest]"); if (finv) finv.textContent = dict.filterInvest;
+    const fnb = $("[data-i18n=filter-newbuild]"); if (fnb) fnb.textContent = dict.filterNewbuild;
     const sortLabel = $("[data-i18n=sort-label]");
     if (sortLabel) sortLabel.childNodes[0].textContent = dict.sortLabel + " ";
     const sel = $("#sort");
