@@ -264,15 +264,15 @@
       p.nextAction ? `<span class="badge ${actionClass(p.nextAction)}">${actionLabel}</span>` : "",
       p.priceDrop ? `<span class="badge drop">${dict.drop}</span>` : "",
     ].join("");
-    const link = p.url
-      ? `<a class="open-link" href="${p.url}" target="_blank" rel="noopener noreferrer">${dict.openListing}</a>`
-      : `<span class="verified">${dict.noUrl}</span>`;
     const dad = p.dadFit;
     const inv = p.investment;
     const showDad = dad != null && Number(dad) >= 60;
     const fits = [];
-    if (showDad) fits.push(fitMeter("dad", dict.dad, dad, true));
-    if (inv != null) fits.push(fitMeter("inv", dict.inv, inv, !showDad));
+    if (showDad) fits.push(fitDonut("dad", dict.dad, dad));
+    if (inv != null) fits.push(fitDonut("inv", dict.inv, inv));
+    const cta = p.url
+      ? `<a class="open-link" href="${p.url}" target="_blank" rel="noopener noreferrer">${dict.openListing}</a>`
+      : `<span class="open-link disabled">${dict.noUrl}</span>`;
     return `
         <article class="card">
           <div class="photo">
@@ -286,25 +286,30 @@
               <div class="price">${formatMoney(p.price)}</div>
               <div class="ppm2">${formatPpm2(p.ppm2)}</div>
             </div>
-            <div class="fits">${fits.join("")}</div>
-            <div class="footer">
-              <div class="verified">${dict.verified}: ${p.lastVerifiedLabel || dict.never}</div>
-              ${link}
-            </div>
+            <div class="fits${fits.length === 1 ? " single" : ""}">${fits.join("")}</div>
+            <div class="notes">${dict.verified}: ${p.lastVerifiedLabel || dict.never}</div>
+            ${cta}
           </div>
         </article>`;
   }
 
-  function fitMeter(kind, label, value, featured) {
+  function fitDonut(kind, label, value) {
     const n = Math.max(0, Math.min(100, Math.round(Number(value))));
-    const featuredCls = featured ? " featured" : "";
+    const r = 34;
+    const c = 2 * Math.PI * r;
+    const dash = (n / 100) * c;
     return `
-      <div class="fit ${kind}${featuredCls}" style="--fit:${n}">
-        <div class="fit-top">
-          <span class="fit-label">${label}</span>
-          <span class="fit-num">${n}</span>
+      <div class="donut ${kind}" role="img" aria-label="${label} ${n}">
+        <div class="donut-ring">
+          <svg viewBox="0 0 80 80" aria-hidden="true">
+            <circle class="donut-bg" cx="40" cy="40" r="${r}"></circle>
+            <circle class="donut-fg" cx="40" cy="40" r="${r}"
+              stroke-dasharray="${dash.toFixed(2)} ${c.toFixed(2)}"
+              transform="rotate(-90 40 40)"></circle>
+          </svg>
+          <span class="donut-num">${n}</span>
         </div>
-        <div class="fit-track" aria-hidden="true"><span class="fit-fill"></span></div>
+        <span class="donut-label">${label}</span>
       </div>`;
   }
 
