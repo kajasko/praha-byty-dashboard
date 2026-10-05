@@ -265,7 +265,7 @@
       p.priceDrop ? `<span class="badge drop">${dict.drop}</span>` : "",
     ].join("");
     const link = p.url
-      ? `<a class="open-link" href="${p.url}" target="_blank" rel="noopener noreferrer">${dict.openListing} ↗</a>`
+      ? `<a class="open-link" href="${p.url}" target="_blank" rel="noopener noreferrer">${dict.openListing}</a>`
       : `<span class="verified">${dict.noUrl}</span>`;
     const dad = p.dadFit;
     const inv = p.investment;
