@@ -7,8 +7,8 @@
       subtitle: "Jen dnes ověřené živé inzeráty z Airtable (ACTIVE VERIFIED). Prodané/stažené se nezobrazují.",
       filterAll: "Vše",
       filterNow: "Co teď",
-      filterDad: "Dad focus",
-      filterInvest: "Investment focus",
+      filterDad: "Dad",
+      filterInvest: "Investice",
       filterActive: "Jen ACTIVE",
       sortLabel: "Řadit",
       sortDad: "Dad Fit",
@@ -34,7 +34,7 @@
       reserved: "RESERVED",
       landEyebrow: "Soukromé · rodina",
       landTitle: "Shortlist živých pražských bytů",
-      landLead: "Pro tátu (na bydlení) a na dlouhodobý pronájem. Jen dnes ověřené živé inzeráty; prodané nebo stažené se tu neobjeví.",
+      landLead: "Pro tátu (na bydlení) a na dlouhodobý pronájem. Jen dnes ověřené živé inzeráty.",
       land1t: "Co teď",
       land1: "Kandidáti na volat / prohlídku, ověřené dnes jako živé.",
       land2t: "Skóre",
@@ -58,8 +58,8 @@
       subtitle: "Only listings verified live today in Airtable (ACTIVE VERIFIED). Sold/removed never shown.",
       filterAll: "All",
       filterNow: "What now",
-      filterDad: "Dad focus",
-      filterInvest: "Investment focus",
+      filterDad: "Dad",
+      filterInvest: "Investment",
       filterActive: "Active only",
       sortLabel: "Sort",
       sortDad: "Dad Fit",
@@ -85,7 +85,7 @@
       reserved: "RESERVED",
       landEyebrow: "Private · family",
       landTitle: "Shortlist of live Prague flats",
-      landLead: "For Dad (to live in) and for long-term rent. Only listings verified live today; sold or removed never appear.",
+      landLead: "For Dad (to live in) and for long-term rent. Only listings verified live today.",
       land1t: "What now",
       land1: "Call or viewing candidates, verified live today.",
       land2t: "Scores",
@@ -163,26 +163,15 @@
   }
 
   function matchesFilter(p) {
-    const use = Array.isArray(p.useCase) ? p.useCase : [];
-    const tags = Array.isArray(p.tags) ? p.tags : [];
-    if (state.filter === "action-now") {
-      return p.nextAction === "CALL NOW" || p.nextAction === "BOOK VIEWING";
-    }
+    // Dad: only show when Dad Fit is in play (>= 60)
     if (state.filter === "dad") {
       return p.dadFit != null && Number(p.dadFit) >= 60;
     }
+    // Investment: has an invest score (shown even when Dad is hidden)
     if (state.filter === "invest") {
-      return (
-        (p.investment != null && p.investment >= 75) ||
-        use.includes("Investment") ||
-        tags.some((x) => String(x).includes("INVEST") || String(x).includes("BOTH")) ||
-        p.nextAction === "CALL NOW" ||
-        p.nextAction === "BOOK VIEWING"
-      );
+      return p.investment != null && Number(p.investment) > 0;
     }
-    if (state.filter === "active") {
-      return p.availability === "ACTIVE VERIFIED";
-    }
+    // All: everything live today in the pipeline views
     return true;
   }
 
@@ -218,8 +207,8 @@
     $("[data-i18n=kicker]").textContent = dict.kicker;
     $("[data-i18n=title]").textContent = dict.title;
     $("[data-i18n=subtitle]").textContent = dict.subtitle;
-    $("[data-i18n=filter-all]").textContent = dict.filterAll;
-    $("[data-i18n=filter-now]").textContent = dict.filterNow;
+    const fall = $("[data-i18n=filter-all]"); if (fall) fall.textContent = dict.filterAll;
+    const fnow = $("[data-i18n=filter-now]"); if (fnow) fnow.textContent = dict.filterNow;
     $("[data-i18n=filter-dad]").textContent = dict.filterDad;
     $("[data-i18n=filter-invest]").textContent = dict.filterInvest;
     const fa = $("[data-i18n=filter-active]"); if (fa) fa.textContent = dict.filterActive;
@@ -313,18 +302,17 @@
     }
 
     const main = sorted(data.properties.filter(matchesFilter));
-    const showInv = state.filter !== "action-now";
+    const showInv = true;
     const inv = showInv ? sorted(data.investigate.filter(matchesFilter)) : [];
     const all = main.concat(inv);
     const withPhoto = all.filter((p) => p.hasPhoto).length;
 
     $("#meta").innerHTML =
-      `${dict.filterNow}: <strong>${main.length}</strong>` +
-      (showInv ? ` · ${dict.actions.INVESTIGATE}: <strong>${inv.length}</strong>` : "") +
-      ` · <strong>${withPhoto}</strong> ${dict.photos}` +
-      ` · <strong>${all.length - withPhoto}</strong> ${dict.placeholders}`;
+      `<strong>${main.length + (showInv ? inv.length : 0)}</strong>` +
+      (showInv && inv.length ? ` · ${dict.actions.INVESTIGATE}: <strong>${inv.length}</strong>` : "") +
+      ` · <strong>${withPhoto}</strong> ${dict.photos}`;
 
-    grid.innerHTML = main.length ? main.map((p) => cardHtml(p, dict)).join("") : `<div class="empty">${dict.emptyNow}</div>`;
+    grid.innerHTML = main.length ? main.map((p) => cardHtml(p, dict)).join("") : `<div class="empty">${dict.empty}</div>`;
 
     if (invSection) {
       invSection.hidden = !showInv || !inv.length;
