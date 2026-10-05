@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Praha Byty — prohlížení | Praha Byty — browse</title>
+  <meta name="description" content="Bilingual visual browsing dashboard for Karolína's Praha Byty pipeline. Airtable remains source of truth.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-kicker" data-i18n="kicker">Praha Byty · prohlížení</div>
+        <h1 data-i18n="title">Byty k rozhodnutí</h1>
+        <p data-i18n="subtitle">Jen dnes ověřené živé inzeráty z Airtable (ACTIVE VERIFIED). Prodané/stažené se nezobrazují.</p>
+      </div>
+      <div class="lang-toggle" role="group" aria-label="Language">
+        <button type="button" data-lang="cs" class="active">CS</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+    </header>
+
+    <section class="toolbar" aria-label="Filters">
+      <div class="filters">
+        <button type="button" class="chip active" data-filter="all" data-i18n="filter-all">Vše</button>
+        <button type="button" class="chip" data-filter="action-now" data-i18n="filter-now">Co teď</button>
+        <button type="button" class="chip" data-filter="dad" data-i18n="filter-dad">Dad focus</button>
+        <button type="button" class="chip" data-filter="invest" data-i18n="filter-invest">Investment focus</button>
+      </div>
+      <div class="sortrow">
+        <label data-i18n="sort-label">Řadit
+          <select id="sort">
+            <option value="dad">Dad Fit</option>
+            <option value="investment">Investment</option>
+            <option value="price">Cena</option>
+            <option value="verified">Naposledy ověřeno</option>
+          </select>
+        </label>
+        <div class="meta-line" id="meta"></div>
+      </div>
+    </section>
+
+    <main class="grid" id="grid" aria-live="polite"></main>
+
+    <section id="investigate-section" class="inv-section" hidden>
+      <h2 class="inv-title" data-i18n="inv-title">K prověření · ověřeno dnes</h2>
+      <p class="inv-sub" data-i18n="inv-sub">ACTIVE VERIFIED a dnes znovu otevřené — zatím ne Co teď.</p>
+      <div class="grid" id="investigate-grid"></div>
+    </section>
+
+    <p class="foot" data-i18n="foot">Zdroj dat: Airtable Properties. Dashboard je lokální snapshot — záznamy se nemigrují.</p>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
