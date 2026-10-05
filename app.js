@@ -35,6 +35,8 @@
       landEyebrow: "Soukromé · rodina",
       landTitle: "Shortlist živých pražských bytů",
       landLead: "Pro tátu (na bydlení) a na dlouhodobý pronájem. Jen dnes ověřené živé inzeráty.",
+      heroScript: "Praha",
+      heroTagline: "Skvělé místo k životu",
       land1t: "Co teď",
       land1: "Kandidáti na volat / prohlídku, ověřené dnes jako živé.",
       land2t: "Skóre",
@@ -86,6 +88,8 @@
       landEyebrow: "Private · family",
       landTitle: "Shortlist of live Prague flats",
       landLead: "For Dad (to live in) and for long-term rent. Only listings verified live today.",
+      heroScript: "Prague",
+      heroTagline: "A great place to call home",
       land1t: "What now",
       land1: "Call or viewing candidates, verified live today.",
       land2t: "Scores",
@@ -107,7 +111,7 @@
   const state = {
     lang: localStorage.getItem("praha-byty-lang") || "en",
     filter: "all",
-    sort: "dad",
+    sort: "price",
   };
 
   const $ = (sel) => document.querySelector(sel);
@@ -175,6 +179,30 @@
     return true;
   }
 
+
+  function allLive() {
+    return data.properties.concat(data.investigate);
+  }
+
+  function countForFilter(filter) {
+    const list = allLive();
+    if (filter === "dad") return list.filter((p) => p.dadFit != null && Number(p.dadFit) >= 60).length;
+    if (filter === "invest") return list.filter((p) => p.investment != null && Number(p.investment) > 0).length;
+    return list.length;
+  }
+
+  function updateViewCounts() {
+    const map = {
+      dad: countForFilter("dad"),
+      invest: countForFilter("invest"),
+      all: countForFilter("all"),
+    };
+    document.querySelectorAll("[data-count]").forEach((el) => {
+      const key = el.dataset.count;
+      if (key in map) el.textContent = String(map[key]);
+    });
+  }
+
   function sorted(list) {
     const copy = list.slice();
     const dir = -1;
@@ -204,30 +232,23 @@
     const dict = t();
     document.documentElement.lang = state.lang;
     document.title = dict.pageTitle;
-    $("[data-i18n=kicker]").textContent = dict.kicker;
-    $("[data-i18n=title]").textContent = dict.title;
-    $("[data-i18n=subtitle]").textContent = dict.subtitle;
+    const titleEl = $("[data-i18n=title]"); if (titleEl) titleEl.textContent = dict.title;
     const fall = $("[data-i18n=filter-all]"); if (fall) fall.textContent = dict.filterAll;
-    const fnow = $("[data-i18n=filter-now]"); if (fnow) fnow.textContent = dict.filterNow;
-    $("[data-i18n=filter-dad]").textContent = dict.filterDad;
-    $("[data-i18n=filter-invest]").textContent = dict.filterInvest;
-    const fa = $("[data-i18n=filter-active]"); if (fa) fa.textContent = dict.filterActive;
-    $("[data-i18n=sort-label]").childNodes[0].textContent = dict.sortLabel + " ";
+    const fdad = $("[data-i18n=filter-dad]"); if (fdad) fdad.textContent = dict.filterDad;
+    const finv = $("[data-i18n=filter-invest]"); if (finv) finv.textContent = dict.filterInvest;
+    const sortLabel = $("[data-i18n=sort-label]");
+    if (sortLabel) sortLabel.childNodes[0].textContent = dict.sortLabel + " ";
     const sel = $("#sort");
-    sel.options[0].textContent = dict.sortDad;
-    sel.options[1].textContent = dict.sortInv;
-    sel.options[2].textContent = dict.sortPrice;
+    // options: price, dad, investment, verified
+    sel.options[0].textContent = dict.sortPrice;
+    sel.options[1].textContent = dict.sortDad;
+    sel.options[2].textContent = dict.sortInv;
     sel.options[3].textContent = dict.sortVerified;
     const le = $("[data-i18n=land-eyebrow]"); if (le) le.textContent = dict.landEyebrow;
     const lt = $("[data-i18n=land-title]"); if (lt) lt.textContent = dict.landTitle;
     const ll = $("[data-i18n=land-lead]"); if (ll) ll.textContent = dict.landLead;
-    const l1t = $("[data-i18n=land-1-t]"); if (l1t) l1t.textContent = dict.land1t;
-    const l1 = $("[data-i18n=land-1]"); if (l1) l1.textContent = dict.land1;
-    const l2t = $("[data-i18n=land-2-t]"); if (l2t) l2t.textContent = dict.land2t;
-    const l2 = $("[data-i18n=land-2]"); if (l2) l2.textContent = dict.land2;
-    const l3t = $("[data-i18n=land-3-t]"); if (l3t) l3t.textContent = dict.land3t;
-    const l3 = $("[data-i18n=land-3]"); if (l3) l3.textContent = dict.land3;
-    const ln = $("[data-i18n=land-note]"); if (ln) ln.textContent = dict.landNote;
+    const hs = $("[data-i18n=hero-script]"); if (hs) hs.textContent = dict.heroScript;
+    const ht = $("[data-i18n=hero-tagline]"); if (ht) ht.textContent = dict.heroTagline;
     $("[data-i18n=foot]").textContent = dict.foot;
     document.querySelectorAll(".lang-toggle button").forEach((btn) => {
       btn.classList.toggle("active", btn.dataset.lang === state.lang);
@@ -289,6 +310,7 @@
 
   function render() {
     applyI18n();
+    updateViewCounts();
     const dict = t();
     const grid = $("#grid");
     const invSection = $("#investigate-section");
@@ -338,10 +360,10 @@
         render();
       });
     });
-    document.querySelectorAll(".chip[data-filter]").forEach((btn) => {
+    document.querySelectorAll(".view-btn[data-filter]").forEach((btn) => {
       btn.addEventListener("click", () => {
         state.filter = btn.dataset.filter;
-        document.querySelectorAll(".chip[data-filter]").forEach((b) => b.classList.toggle("active", b === btn));
+        document.querySelectorAll(".view-btn[data-filter]").forEach((b) => b.classList.toggle("active", b === btn));
         render();
       });
     });

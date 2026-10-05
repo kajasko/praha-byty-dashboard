@@ -10,39 +10,51 @@
 <body>
   <div class="wrap">
     <header class="topbar">
-      <div class="brand">
-        <div class="brand-kicker" data-i18n="kicker">Praha Byty · prohlížení</div>
-        <h1 data-i18n="title">Byty k rozhodnutí</h1>
-        <p data-i18n="subtitle">Jen dnes ověřené živé inzeráty z Airtable (ACTIVE VERIFIED). Prodané/stažené se nezobrazují.</p>
-      </div>
+      <div class="brand-mark">PRAHA BYTY</div>
       <div class="lang-toggle" role="group" aria-label="Language">
         <button type="button" data-lang="cs">CS</button>
         <button type="button" data-lang="en" class="active">EN</button>
       </div>
     </header>
 
-
-    <section class="landing" aria-label="About this page">
-      <div class="intro">
-        <p class="intro-kicker" data-i18n="land-eyebrow">Private · family</p>
-        <h2 data-i18n="land-title">Shortlist of live Prague flats</h2>
-        <p class="intro-lead" data-i18n="land-lead">For Dad (to live in) and for long-term rent. Only listings verified live today; sold or removed never appear.</p>
+    <section class="hero" aria-label="About this page">
+      <div class="hero-copy">
+        <p class="hero-eyebrow" data-i18n="land-eyebrow">Private · family</p>
+        <h1 class="hero-title" data-i18n="title">Homes to decide on</h1>
+        <p class="hero-sub" data-i18n="land-title">Shortlist of live Prague flats</p>
+        <p class="hero-lead" data-i18n="land-lead">For Dad (to live in) and for long-term rent. Only listings verified live today; sold or removed never appear.</p>
       </div>
+      <figure class="hero-visual">
+        <img src="assets/hero-prague.jpg" alt="" width="1600" height="1067" decoding="async">
+        <figcaption class="hero-caption">
+          <span class="hero-script" data-i18n="hero-script">Prague</span>
+          <span class="hero-tagline" data-i18n="hero-tagline">A great place to call home</span>
+        </figcaption>
+      </figure>
     </section>
 
     <section class="toolbar" aria-label="Filters">
-      <div class="filters">
-        <button type="button" class="chip" data-filter="dad" data-i18n="filter-dad">Dad</button>
-        <button type="button" class="chip" data-filter="invest" data-i18n="filter-invest">Investment</button>
-        <button type="button" class="chip active" data-filter="all" data-i18n="filter-all">All</button>
+      <div class="view-btns" role="tablist" aria-label="Views">
+        <button type="button" class="view-btn" data-filter="dad" role="tab">
+          <span class="view-label" data-i18n="filter-dad">Dad</span>
+          <span class="view-count" data-count="dad">0</span>
+        </button>
+        <button type="button" class="view-btn" data-filter="invest" role="tab">
+          <span class="view-label" data-i18n="filter-invest">Investment</span>
+          <span class="view-count" data-count="invest">0</span>
+        </button>
+        <button type="button" class="view-btn active" data-filter="all" role="tab">
+          <span class="view-label" data-i18n="filter-all">All</span>
+          <span class="view-count" data-count="all">0</span>
+        </button>
       </div>
       <div class="sortrow">
-        <label data-i18n="sort-label">Řadit
+        <label data-i18n="sort-label">Sort
           <select id="sort">
+            <option value="price">Price</option>
             <option value="dad">Dad Fit</option>
             <option value="investment">Investment</option>
-            <option value="price">Cena</option>
-            <option value="verified">Naposledy ověřeno</option>
+            <option value="verified">Last verified</option>
           </select>
         </label>
         <div class="meta-line" id="meta"></div>
