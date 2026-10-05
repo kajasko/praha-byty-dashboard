@@ -32,13 +32,16 @@
       inv: "Invest",
       drop: "Sleva",
       reserved: "RESERVED",
-      landTitle: "Co je tahle stránka",
-      landLead: "Živý shortlist pražských bytů, které řešíme pro tátu (na bydlení) a na investici (dlouhodobý pronájem). Fotky a ceny jsou z inzerátů; stav rozhodování je v Airtable.",
-      land1: "<strong>Co teď</strong> — jen byty ověřené dnes jako živé, kde je potřeba volat nebo prohlídka. Mrtvé inzeráty se tu neobjeví.",
-      land2: "<strong>Karty</strong> — Otevřít inzerát vede na původní nabídku. Skóre Dad / Invest pomáhají porovnat (když jsou vyplněná).",
-      land3: "<strong>Filtry</strong> — Co teď / Dad / Investice. Jazyk: výchozí EN, k dispozici CS.",
-      land4: "<strong>Aktualizace</strong> — všední dny se přegeneruje z Airtable. Když něco nesedí, zkus znovu po ranním refreshi.",
-      landNote: "Nejde o realitku — soukromá nástěnka pro rodinu.",
+      landEyebrow: "Soukromá rodinná nástěnka",
+      landTitle: "Živý shortlist pro tátu i investici",
+      landLead: "Pražské byty, které řešíme na bydlení a na dlouhodobý pronájem. Jen dnes ověřené živé inzeráty — prodané nebo stažené se tu neobjeví.",
+      land1t: "Co teď",
+      land1: "Ověřeno dnes jako živé — nejdřív volat nebo prohlídka. Mrtvé inzeráty zůstávají venku.",
+      land2t: "Dvě optiky",
+      land2: "Dad Fit a Invest skóre vedle sebe. Karta otevře původní inzerát.",
+      land3t: "Vždy čerstvé",
+      land3: "Ve všední dny se přegeneruje z Airtable. Filtry: Co teď, Dad, Investice.",
+      landNote: "Ne realitka · nástěnka pro rozhodnutí",
       foot: "Zdroj: Airtable. Veřejný snapshot na GitHub Pages — záznamy zůstávají v Airtable.",
       actions: {
         "CALL NOW": "Volat teď",
@@ -80,13 +83,16 @@
       inv: "Invest",
       drop: "Price drop",
       reserved: "RESERVED",
-      landTitle: "What this page is",
-      landLead: "A live shortlist of Prague flats we’re evaluating for Dad (to live in) and for investment (long-term rent). Photos and prices come from the listing sites; the decision status lives in Airtable.",
-      land1: "<strong>What now</strong> — only flats verified live today that need a call or viewing. Dead ads never appear here.",
-      land2: "<strong>Cards</strong> — Open listing goes to the original ad. Dad / Invest scores help compare (when filled).",
-      land3: "<strong>Filters</strong> — What now / Dad focus / Investment. Language: EN by default, CS available.",
-      land4: "<strong>Updates</strong> — refreshed on weekdays from Airtable. If something looks off, check again after the morning rebuild.",
-      landNote: "Not a real-estate agency site — a private decision board for the family.",
+      landEyebrow: "Private family board",
+      landTitle: "A live shortlist for Dad & investment",
+      landLead: "Prague flats we’re evaluating to live in and to rent long-term. Only listings verified live today — sold or removed never appear.",
+      land1t: "What now",
+      land1: "Verified live today — call or viewing first. Dead ads stay out.",
+      land2t: "Two lenses",
+      land2: "Dad Fit and Invest scores side by side. Open any card for the original listing.",
+      land3t: "Always fresh",
+      land3: "Rebuilt on weekdays from Airtable. Filters: What now, Dad, Investment.",
+      landNote: "Not an agency · decision board",
       foot: "Source: Airtable. Public snapshot on GitHub Pages — records stay in Airtable.",
       actions: {
         "CALL NOW": "Call now",
@@ -229,12 +235,15 @@
     sel.options[1].textContent = dict.sortInv;
     sel.options[2].textContent = dict.sortPrice;
     sel.options[3].textContent = dict.sortVerified;
+    const le = $("[data-i18n=land-eyebrow]"); if (le) le.textContent = dict.landEyebrow;
     const lt = $("[data-i18n=land-title]"); if (lt) lt.textContent = dict.landTitle;
     const ll = $("[data-i18n=land-lead]"); if (ll) ll.textContent = dict.landLead;
-    const l1 = $("[data-i18n=land-1]"); if (l1) l1.innerHTML = dict.land1;
-    const l2 = $("[data-i18n=land-2]"); if (l2) l2.innerHTML = dict.land2;
-    const l3 = $("[data-i18n=land-3]"); if (l3) l3.innerHTML = dict.land3;
-    const l4 = $("[data-i18n=land-4]"); if (l4) l4.innerHTML = dict.land4;
+    const l1t = $("[data-i18n=land-1-t]"); if (l1t) l1t.textContent = dict.land1t;
+    const l1 = $("[data-i18n=land-1]"); if (l1) l1.textContent = dict.land1;
+    const l2t = $("[data-i18n=land-2-t]"); if (l2t) l2t.textContent = dict.land2t;
+    const l2 = $("[data-i18n=land-2]"); if (l2) l2.textContent = dict.land2;
+    const l3t = $("[data-i18n=land-3-t]"); if (l3t) l3t.textContent = dict.land3t;
+    const l3 = $("[data-i18n=land-3]"); if (l3) l3.textContent = dict.land3;
     const ln = $("[data-i18n=land-note]"); if (ln) ln.textContent = dict.landNote;
     $("[data-i18n=foot]").textContent = dict.foot;
     document.querySelectorAll(".lang-toggle button").forEach((btn) => {
