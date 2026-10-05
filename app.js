@@ -169,13 +169,7 @@
       return p.nextAction === "CALL NOW" || p.nextAction === "BOOK VIEWING";
     }
     if (state.filter === "dad") {
-      return (
-        (p.dadFit != null && p.dadFit >= 60) ||
-        use.includes("Dad") ||
-        tags.some((x) => String(x).includes("DAD") || String(x).includes("BOTH")) ||
-        p.nextAction === "CALL NOW" ||
-        p.nextAction === "BOOK VIEWING"
-      );
+      return p.dadFit != null && Number(p.dadFit) >= 60;
     }
     if (state.filter === "invest") {
       return (
