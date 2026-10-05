@@ -294,19 +294,67 @@ select {
   font-size: 0.9rem;
   font-weight: 600;
 }
-.chips {
+.fits {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 0.1rem;
+}
+.fit {
+  display: grid;
+  gap: 0.28rem;
+}
+.fit-top {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
-.score {
-  font-size: 0.78rem;
+.fit-label {
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.28rem 0.55rem;
-  border-radius: 999px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
-.score.dad { background: var(--dad-soft); color: var(--dad); }
-.score.inv { background: var(--inv-soft); color: var(--inv); }
+.fit-num {
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.fit.featured .fit-num {
+  font-size: 1.35rem;
+  font-family: var(--font);
+  line-height: 1;
+}
+.fit.featured .fit-label {
+  color: var(--dad);
+}
+.fit-track {
+  height: 6px;
+  border-radius: 999px;
+  background: #ebe4db;
+  overflow: hidden;
+}
+.fit.featured .fit-track {
+  height: 10px;
+}
+.fit-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--fit) * 1%);
+  border-radius: inherit;
+  background: var(--inv);
+}
+.fit.dad .fit-fill {
+  background: linear-gradient(90deg, #5a8f78, var(--dad));
+}
+.fit.inv .fit-fill {
+  background: linear-gradient(90deg, #7a8cb8, var(--inv));
+}
+.fit.dad.featured .fit-num { color: var(--dad); }
+.fit.inv:not(.featured) .fit-num { color: var(--inv); font-size: 0.9rem; }
 .footer {
   margin-top: auto;
   display: flex;

@@ -263,6 +263,12 @@
     const link = p.url
       ? `<a class="open-link" href="${p.url}" target="_blank" rel="noopener noreferrer">${dict.openListing} ↗</a>`
       : `<span class="verified">${dict.noUrl}</span>`;
+    const dad = p.dadFit;
+    const inv = p.investment;
+    const showDad = dad != null && Number(dad) >= 60;
+    const fits = [];
+    if (showDad) fits.push(fitMeter("dad", dict.dad, dad, true));
+    if (inv != null) fits.push(fitMeter("inv", dict.inv, inv, !showDad));
     return `
         <article class="card">
           <div class="photo">
@@ -276,16 +282,26 @@
               <div class="price">${formatMoney(p.price)}</div>
               <div class="ppm2">${formatPpm2(p.ppm2)}</div>
             </div>
-            <div class="chips">
-              <span class="score dad">${dict.dad} ${p.dadFit != null ? p.dadFit : "—"}</span>
-              <span class="score inv">${dict.inv} ${p.investment != null ? p.investment : "—"}</span>
-            </div>
+            <div class="fits">${fits.join("")}</div>
             <div class="footer">
               <div class="verified">${dict.verified}: ${p.lastVerifiedLabel || dict.never}</div>
               ${link}
             </div>
           </div>
         </article>`;
+  }
+
+  function fitMeter(kind, label, value, featured) {
+    const n = Math.max(0, Math.min(100, Math.round(Number(value))));
+    const featuredCls = featured ? " featured" : "";
+    return `
+      <div class="fit ${kind}${featuredCls}" style="--fit:${n}">
+        <div class="fit-top">
+          <span class="fit-label">${label}</span>
+          <span class="fit-num">${n}</span>
+        </div>
+        <div class="fit-track" aria-hidden="true"><span class="fit-fill"></span></div>
+      </div>`;
   }
 
   function render() {
