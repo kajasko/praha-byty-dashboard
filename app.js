@@ -85,7 +85,7 @@
   };
 
   const state = {
-    lang: localStorage.getItem("praha-byty-lang") || "cs",
+    lang: localStorage.getItem("praha-byty-lang") || "en",
     filter: "all",
     sort: "dad",
   };
