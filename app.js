@@ -4,7 +4,7 @@
       pageTitle: "Praha Byty — prohlížení | Praha Byty — browse",
       kicker: "Praha Byty · prohlížení",
       title: "Byty k rozhodnutí",
-      subtitle: "Jen dnes ověřené živé inzeráty z Airtable (ACTIVE VERIFIED). Prodané/stažené se nezobrazují.",
+      subtitle: "Jen živé inzeráty ověřené v posledních dnech (ACTIVE VERIFIED). Prodané/stažené se nezobrazují.",
       filterAll: "Vše",
       filterNow: "Co teď",
       filterDad: "Dad",
@@ -25,21 +25,21 @@
       verified: "Ověřeno",
       never: "neověřeno",
       empty: "Nic neodpovídá filtrům.",
-      emptyNow: "Dnes žádný ověřený živý byt k akci.",
-      invTitle: "K prověření · ověřeno dnes",
-      invSub: "ACTIVE VERIFIED a dnes znovu otevřené — zatím ne Co teď.",
-      stale: "Data nejsou ověřena dnes — karty skryty. Spusťte znovu ověření inzerátů.",
+      emptyNow: "Teď žádný ověřený živý byt k akci.",
+      invTitle: "K prověření · nedávno ověřeno",
+      invSub: "ACTIVE VERIFIED a nedávno znovu otevřené — zatím ne Co teď.",
+      stale: "Data starší než 3 dny — karty skryty. Spusťte znovu ověření inzerátů.",
       dad: "Dad",
       inv: "Invest",
       drop: "Sleva",
       reserved: "RESERVED",
       landEyebrow: "Soukromé · rodina",
       landTitle: "Shortlist živých pražských bytů",
-      landLead: "Pro tátu (na bydlení) a na dlouhodobý pronájem. Jen dnes ověřené živé inzeráty.",
+      landLead: "Pro tátu (na bydlení) a na dlouhodobý pronájem. Jen nedávno ověřené živé inzeráty.",
       heroScript: "Praha",
       heroTagline: "Skvělé místo k životu",
       land1t: "Co teď",
-      land1: "Kandidáti na volat / prohlídku, ověřené dnes jako živé.",
+      land1: "Kandidáti na volat / prohlídku, nedávno ověření jako živí.",
       land2t: "Skóre",
       land2: "Dad Fit a Invest na kartě; odtud otevřeš původní inzerát.",
       land3t: "Zdroj",
@@ -58,7 +58,7 @@
       pageTitle: "Praha Byty — browse | Praha Byty — prohlížení",
       kicker: "Praha Byty · browse",
       title: "Homes to decide on",
-      subtitle: "Only listings verified live today in Airtable (ACTIVE VERIFIED). Sold/removed never shown.",
+      subtitle: "Only listings recently re-checked as live (ACTIVE VERIFIED). Sold/removed never shown.",
       filterAll: "All",
       filterNow: "What now",
       filterDad: "Dad",
@@ -79,21 +79,21 @@
       verified: "Verified",
       never: "not verified",
       empty: "Nothing matches these filters.",
-      emptyNow: "No verified live listing to act on today.",
-      invTitle: "To investigate · verified today",
-      invSub: "ACTIVE VERIFIED and re-opened today — not What now yet.",
-      stale: "Data not verified today — cards hidden. Re-run listing verification.",
+      emptyNow: "No verified live listing to act on right now.",
+      invTitle: "To investigate · recently verified",
+      invSub: "ACTIVE VERIFIED and recently re-opened — not What now yet.",
+      stale: "Data older than 3 days — cards hidden. Re-run listing verification.",
       dad: "Dad",
       inv: "Invest",
       drop: "Price drop",
       reserved: "RESERVED",
       landEyebrow: "Private · family",
       landTitle: "Shortlist of live Prague flats",
-      landLead: "For Dad (to live in) and for long-term rent. Only listings verified live today.",
+      landLead: "For Dad (to live in) and for long-term rent. Only recently verified live listings.",
       heroScript: "Prague",
       heroTagline: "A great place to call home",
       land1t: "What now",
-      land1: "Call or viewing candidates, verified live today.",
+      land1: "Call or viewing candidates, recently verified live.",
       land2t: "Scores",
       land2: "Dad Fit and Invest on each card; open the original listing from the card.",
       land3t: "Source",
@@ -137,13 +137,20 @@
     }
   }
   const TODAY = pragueToday();
-  const isLiveToday = (p) => p && p.availability === "ACTIVE VERIFIED" && p.lastVerified && pragueDate(p.lastVerified) === TODAY;
+  // Listings re-opened at most MAX_AGE_DAYS ago (weekly heavy scan + weekday checks).
+  const MAX_AGE_DAYS = 3;
+  const ageDays = (ymd) => {
+    if (!ymd) return Infinity;
+    const a = Date.parse(TODAY + "T00:00:00Z"), b = Date.parse(String(ymd).slice(0, 10) + "T00:00:00Z");
+    return Number.isNaN(b) ? Infinity : Math.round((a - b) / 86400000);
+  };
+  const isLiveToday = (p) => p && p.availability === "ACTIVE VERIFIED" && p.lastVerified && ageDays(pragueDate(p.lastVerified)) <= MAX_AGE_DAYS;
   const data = {
     meta: rawData.meta || {},
     properties: (rawData.properties || []).filter((p) => isLiveToday(p) && (p.nextAction === "CALL NOW" || p.nextAction === "BOOK VIEWING")),
     investigate: (rawData.investigate || []).filter((p) => isLiveToday(p) && p.nextAction === "INVESTIGATE"),
   };
-  const isStale = (rawData.meta && rawData.meta.verifiedDate && rawData.meta.verifiedDate !== TODAY);
+  const isStale = (rawData.meta && rawData.meta.verifiedDate && ageDays(rawData.meta.verifiedDate) > MAX_AGE_DAYS);
 
   function t() {
     return I18N[state.lang] || I18N.cs;
