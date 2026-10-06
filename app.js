@@ -28,7 +28,7 @@
       emptyNow: "Teď žádný ověřený živý byt k akci.",
       invTitle: "K prověření · nedávno ověřeno",
       invSub: "ACTIVE VERIFIED a nedávno znovu otevřené — zatím ne Co teď.",
-      stale: "Data starší než 3 dny — karty skryty. Spusťte znovu ověření inzerátů.",
+      stale: "Data starší než týden — karty skryty. Spusťte znovu ověření inzerátů.",
       dad: "Dad",
       inv: "Invest",
       drop: "Sleva",
@@ -82,7 +82,7 @@
       emptyNow: "No verified live listing to act on right now.",
       invTitle: "To investigate · recently verified",
       invSub: "ACTIVE VERIFIED and recently re-opened — not What now yet.",
-      stale: "Data older than 3 days — cards hidden. Re-run listing verification.",
+      stale: "Data older than a week — cards hidden. Re-run listing verification.",
       dad: "Dad",
       inv: "Invest",
       drop: "Price drop",
@@ -137,8 +137,8 @@
     }
   }
   const TODAY = pragueToday();
-  // Listings re-opened at most MAX_AGE_DAYS ago (weekly heavy scan + weekday checks).
-  const MAX_AGE_DAYS = 3;
+  // Listings re-opened at most MAX_AGE_DAYS ago (weekly Monday heavy scan).
+  const MAX_AGE_DAYS = 8;
   const ageDays = (ymd) => {
     if (!ymd) return Infinity;
     const a = Date.parse(TODAY + "T00:00:00Z"), b = Date.parse(String(ymd).slice(0, 10) + "T00:00:00Z");
