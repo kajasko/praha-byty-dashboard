@@ -43,9 +43,9 @@ Then open http://127.0.0.1:8765/
 
 ## Data snapshot (this build)
 
-- Heavy scan 5. 10. 2026 ~20:00 (Europe/Prague): 72 Airtable records re-verified via their listing URLs → 69 live (4 of them RESERVED), 1 demoted to REMOVED / INACTIVE (Ruská – sold), 1 UNKNOWN (Aubrechtové – ceskereality 403, needs browser). Litevská moved to its new Sreality listing (price drop 8.95 → 8.85 M Kč).
-- New today: 8 secondary-market candidates (Žižkov / Strašnice / Vršovice / Nusle) + 3 new builds (Rezidence K Botiči, Bohdalecké zahrady ×2).
-- **7** Co teď cards (6 CALL NOW, 1 BOOK VIEWING), **57** investigate cards, **64** total; 54 with real photos, 10 placeholders (developer pages without a static photo).
-- Thumbs of dead / non-dashboard records were removed from `thumbs/`.
+- Weekly heavy scan 19. 10. 2026 (Europe/Prague): 89 live-looking Airtable records re-verified on their listing URLs → 73 still ACTIVE VERIFIED, 6 demoted to REMOVED / INACTIVE (ads gone), 10 RESERVED (off the dashboard), 1 unverifiable (Aubrechtové – ceskereality 403). Na vrcholu (Žižkov) is back: the same flat was relisted on Sreality. Price drops: Černokostelecká 2+kk, Bednářská, Na Balkáně mezonet, Zvonková, V předpolí, Ovčárská.
+- New this week: 19 secondary-market flats (Strašnice / Záběhlice / Nusle / Vršovice / Žižkov / Malešice / Michle / Vinohrady) + 8 new builds (M-House Vršovice, Za.hraďák, Roztylské nám., Harfa Living, Bohdalecké zahrady, Tesla Hloubětín, Kaskády 208/S, RANTA D 201).
+- **15** Co teď cards (9 CALL NOW, 6 BOOK VIEWING), **74** investigate cards, **89** total; 78 with real photos, 11 placeholders (developer pages without a static photo).
+- Only ACTIVE VERIFIED records verified on 19. 10. 2026 are included; thumbs of dead / non-dashboard records were removed from `thumbs/`.
 
 Refresh: re-run the verification task and replace `data.js` / `data.json` / `thumbs/`.
